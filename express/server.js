@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 var cors = require('cors')
-require('dotenv').config();
+// require('dotenv').config();
 const router = express.Router();
 
 // router.get('/', (req, res) => {
