@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Mail server for portfolio app",
   "scripts": {
-    "start": "cd express/ && node server.js",
+    "start": "node src/server.js",
     "format": "yarn rome format . --write",
     "check": "yarn rome check ."
   },
