@@ -1,12 +1,11 @@
 {
-  "name": "heroku-cra-node",
-  "version": "3.0.0",
-  "description": "How to use create-react-app with a custom Node API on Heroku",
-  "engines": {
-    "node": "10.x"
-  },
+  "name": "portfolio-mail-server",
+  "version": "1.0.0",
+  "description": "Mail server for portfolio app",
   "scripts": {
-    "start": "cd express/ && node server.js"
+    "start": "cd express/ && node server.js",
+    "format": "yarn rome format . --write",
+    "check": "yarn rome check ."
   },
   "cacheDirectories": [
     "node_modules"
@@ -24,9 +23,11 @@
   },
   "keywords": [
     "node",
-    "heroku",
-    "create-react-app",
-    "react"
+    "mail server",
+    "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "rome": "^11.0.0"
+  }
 }
