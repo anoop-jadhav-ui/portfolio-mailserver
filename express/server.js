@@ -2,8 +2,8 @@ const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-var cors = require('cors')
-var bodyParser=require("body-parser");
+const cors = require('cors')
+const bodyParser = require("body-parser");
 
 
 require('dotenv').config();
@@ -11,8 +11,8 @@ require('dotenv').config();
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-var corsOptions = {
-  origin: 'http://localhost:3000',
+const corsOptions = {
+  origin: 'https://anoopjadhav.vercel.app/',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -40,14 +40,13 @@ if (!isDev && cluster.isMaster) {
   });
 
 } else {
-  
+
   app.use(cors({
     corsOptions
   }))
   // Answer API requests.
-  app.post('/mail',function (req, res) {
+  app.post('/mail', function (req, res) {
     res.set("Content-Type", "application/json");
-    const locals = { userName: req.body.userName };
     const request = mailjet.post("send", { 'version': 'v3.1' }).request({
       "Messages": [
         {
@@ -63,7 +62,7 @@ if (!isDev && cluster.isMaster) {
           ],
           "Subject": "AJ Portfolio | Feedback",
           "TextPart": "Feedback",
-          "HTMLPart": "<h3>FeedBack</h3><p>"+req.body.userMessage+"</p>",
+          "HTMLPart": `<h3>FeedBack</h3><p>${req.body.userMessage}</p>`,
           "CustomID": "portfolio-feedback"
         }
       ]
@@ -72,12 +71,12 @@ if (!isDev && cluster.isMaster) {
       .then((result) => {
         console.log('Email Sent')
         res.send({
-          msg : 'success'
+          msg: 'success'
         });
       })
       .catch((err) => {
         res.send({
-          msg : 'fail'
+          msg: 'fail'
         });
         console.log(err.statusCode)
       })
@@ -90,6 +89,6 @@ if (!isDev && cluster.isMaster) {
   });
 
   app.listen(PORT, function () {
-    console.error(`Node ${isDev ? 'dev server' : 'cluster worker ' + process.pid}: listening on port ${PORT}`);
+    console.error(`Node ${isDev ? 'dev server' : `cluster worker ${process.pid}`}: listening on port ${PORT}`);
   });
 }
