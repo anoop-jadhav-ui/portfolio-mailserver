@@ -1,7 +1,5 @@
 const express = require("express");
 const path = require("path");
-const cluster = require("cluster");
-const numCPUs = require("os").cpus().length;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
@@ -16,7 +14,6 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
-const isDev = process.env.NODE_ENV !== "production";
 const PORT = process.env.PORT || 8001;
 
 const mailjet = require("node-mailjet").connect(
@@ -68,9 +65,5 @@ app.post("/mail", function (req, res) {
 });
 
 app.listen(PORT, function () {
-  console.error(
-    `Node ${
-      isDev ? "dev server" : `cluster worker ${process.pid}`
-    }: listening on port ${PORT}`
-  );
+  console.error(`listening on port ${PORT}`);
 });
