@@ -2,8 +2,9 @@
   "name": "portfolio-mail-server",
   "version": "1.0.0",
   "description": "Mail server for portfolio app",
+  "type": "module",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node index.js",
     "format": "yarn rome format . --write",
     "check": "yarn rome check ."
   },
