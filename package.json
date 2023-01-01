@@ -9,9 +9,6 @@
     "format": "yarn rome format . --write",
     "check": "yarn rome check ."
   },
-  "cacheDirectories": [
-    "node_modules"
-  ],
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
