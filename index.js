@@ -16,7 +16,8 @@ const corsOptions = {
 
 const PORT = process.env.PORT || 8001;
 
-const mailjet = require("node-mailjet").connect(
+const Mailjet = require("node-mailjet");
+const mailjet = Mailjet.apiConnect(
   process.env.MJ_APIKEY_PUBLIC,
   process.env.MJ_APIKEY_PRIVATE
 );
