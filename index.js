@@ -46,7 +46,7 @@ app.post("/mail", function (req, res) {
         Subject: "AJ Portfolio | Feedback",
         TextPart: "Feedback",
         HTMLPart: `
-            <div><h3>FeedBack</h3><p>${userName}</p><p>${userMessage}</p></div>
+            <div><h3>FeedBack</h3><p>name : ${userName}</p><p>message : ${userMessage}</p></div>
           `,
         CustomID: "portfolio-feedback",
       },
