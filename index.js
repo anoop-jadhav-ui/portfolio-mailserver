@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
 require("dotenv").config();
 
 const app = express();
@@ -15,26 +14,28 @@ const corsOptions = {
 
 const PORT = process.env.PORT || 8001;
 
-const Mailjet = require("node-mailjet");
-const mailjet = Mailjet.apiConnect(
-  process.env.MJ_APIKEY_PUBLIC,
-  process.env.MJ_APIKEY_PRIVATE
-);
-
 app.use(
   cors({
     corsOptions,
   })
 );
+
+const mailJetModule = require("node-mailjet");
+const mailjet = mailJetModule.apiConnect(
+  process.env.MJ_APIKEY_PUBLIC,
+  process.env.MJ_APIKEY_PRIVATE
+);
 // Answer API requests.
 app.post("/mail", function (req, res) {
   res.set("Content-Type", "application/json");
+  const { userEmail, userName, userMessage } = req.body;
+
   const request = mailjet.post("send", { version: "v3.1" }).request({
     Messages: [
       {
         From: {
-          Email: req.body.userEmail,
-          Name: req.body.userName,
+          Email: userEmail,
+          Name: userName,
         },
         To: [
           {
@@ -44,23 +45,26 @@ app.post("/mail", function (req, res) {
         ],
         Subject: "AJ Portfolio | Feedback",
         TextPart: "Feedback",
-        HTMLPart: `<h3>FeedBack</h3><p>${req.body.userMessage}</p>`,
+        HTMLPart: `
+            <div><h3>FeedBack</h3><p>${userName}</p><p>${userMessage}</p></div>
+          `,
         CustomID: "portfolio-feedback",
       },
     ],
   });
   request
-    .then((result) => {
+    .then(() => {
       console.log("Email Sent");
-      res.send({
+      res.status(200).send({
         msg: "success",
       });
     })
     .catch((err) => {
-      res.send({
-        msg: "fail",
+      res.status(400).send({
+        msg: "failed",
+        errorCode: err.statusCode,
+        errorMessage: err,
       });
-      console.log(err.statusCode);
     });
 });
 
