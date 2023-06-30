@@ -34,7 +34,7 @@ app.post("/mail", function (req, res) {
     Messages: [
       {
         From: {
-          Email: email,
+          Email: "anoopjadhav@gmail.com",
           Name: name,
         },
         To: [
