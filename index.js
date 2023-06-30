@@ -28,14 +28,14 @@ const mailjet = mailJetModule.apiConnect(
 // Answer API requests.
 app.post("/mail", function (req, res) {
   res.set("Content-Type", "application/json");
-  const { userEmail, userName, userMessage } = req.body;
+  const { email, name, message } = req.body;
 
   const request = mailjet.post("send", { version: "v3.1" }).request({
     Messages: [
       {
         From: {
-          Email: userEmail,
-          Name: userName,
+          Email: email,
+          Name: name,
         },
         To: [
           {
@@ -46,7 +46,7 @@ app.post("/mail", function (req, res) {
         Subject: "AJ Portfolio | Feedback",
         TextPart: "Feedback",
         HTMLPart: `
-            <div><h3>FeedBack</h3><p>name : ${userName}</p><p>message : ${userMessage}</p></div>
+            <div><h3>FeedBack</h3><p>name : ${name}</p><p>email : ${email}</p><p>message : ${message}</p></div>
           `,
         CustomID: "portfolio-feedback",
       },
