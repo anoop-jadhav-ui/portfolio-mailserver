@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
@@ -25,16 +26,28 @@ const mailjet = mailJetModule.apiConnect(
   process.env.MJ_APIKEY_PUBLIC,
   process.env.MJ_APIKEY_PRIVATE
 );
-// Answer API requests.
+
+const loadEmailTemplate = (name, email, message) => {
+  const template = fs.readFileSync("./emailTemplate.html", "utf-8");
+
+  const updatedTemplate = template
+    .replace("{{name}}", name)
+    .replace("{{email}}", email)
+    .replace("{{message}}", message);
+
+  return updatedTemplate;
+};
+
 app.post("/mail", function (req, res) {
   res.set("Content-Type", "application/json");
   const { email, name, message } = req.body;
 
+  const emailContent = loadEmailTemplate(name, email, message);
   const request = mailjet.post("send", { version: "v3.1" }).request({
     Messages: [
       {
         From: {
-          Email: "anoopjadhav@gmail.com",
+          Email: "anoopjadhav+portfolio@gmail.com",
           Name: name,
         },
         To: [
@@ -43,15 +56,14 @@ app.post("/mail", function (req, res) {
             Name: "Anoop Jadhav",
           },
         ],
-        Subject: "AJ Portfolio | Feedback",
-        TextPart: "Feedback",
-        HTMLPart: `
-            <div><h3>FeedBack</h3><p>name : ${name}</p><p>email : ${email}</p><p>message : ${message}</p></div>
-          `,
+        Subject: "Portfolio | You got a new message",
+        TextPart: message,
+        HTMLPart: emailContent,
         CustomID: "portfolio-feedback",
       },
     ],
   });
+
   request
     .then(() => {
       console.log("Email Sent");
@@ -60,6 +72,7 @@ app.post("/mail", function (req, res) {
       });
     })
     .catch((err) => {
+      console.error("Error sending email:", err);
       res.status(400).send({
         msg: "failed",
         errorCode: err.statusCode,
