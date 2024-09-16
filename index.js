@@ -28,7 +28,6 @@ const mailjet = mailJetModule.apiConnect(
   process.env.MJ_APIKEY_PRIVATE
 );
 
-// Updated path to point to the public folder
 const loadEmailTemplate = (name, email, message) => {
   const templatePath = path.join(__dirname, "public", "emailTemplate.html"); // Path to public/emailTemplate.html
 
@@ -58,7 +57,7 @@ app.post("/mail", function (req, res) {
       Messages: [
         {
           From: {
-            Email: "anoopjadhav+portfolio@gmail.com",
+            Email: process.env.MJ_SENDER_EMAIL,
             Name: name,
           },
           To: [
