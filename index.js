@@ -28,7 +28,7 @@ const mailjet = mailJetModule.apiConnect(
   process.env.MJ_APIKEY_PRIVATE
 );
 
-const loadEmailTemplate = (name, email, message) => {
+const loadEmailTemplate = (name, email, message, section) => {
   const templatePath = path.join(__dirname, "public", "emailTemplate.html"); // Path to public/emailTemplate.html
 
   if (!fs.existsSync(templatePath)) {
@@ -40,7 +40,8 @@ const loadEmailTemplate = (name, email, message) => {
   const updatedTemplate = template
     .replace("{{name}}", name)
     .replace("{{email}}", email)
-    .replace("{{message}}", message);
+    .replace("{{message}}", message)
+    .replace("{{section}}", section);
 
   return updatedTemplate;
 };
@@ -49,10 +50,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/mail", function (req, res) {
   res.set("Content-Type", "application/json");
-  const { email, name, message } = req.body;
+  const { email, name, message, section } = req.body;
 
   try {
-    const emailContent = loadEmailTemplate(name, email, message);
+    const emailContent = loadEmailTemplate(name, email, message, section);
     const request = mailjet.post("send", { version: "v3.1" }).request({
       Messages: [
         {
